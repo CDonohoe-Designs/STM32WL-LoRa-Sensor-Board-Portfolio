@@ -139,25 +139,58 @@ The objective was to integrate the RF section into the mixed-signal PCB without 
 
 ## PCB Design
 
-![STM32WL PCB Layout](Images/STM32WL_PCB_Layout.jpg)
-
 I developed the PCB as a **4-layer mixed-signal design** in Altium Designer.
 
-The layout was partitioned into identifiable functional areas including:
+A key part of the layout strategy was the deliberate physical separation of the **RF, digital and analogue sections**, rather than allowing the different functional blocks to become intermixed across the PCB.
 
-* RF
-* Digital / STM32WL
-* Analogue front end
-* Sensor interface
-* Power regulation
+![STM32WL PCB Layout](Images/STM32WL_PCB_Layout.jpg)
 
-Particular attention was given to component placement, return-current paths, grounding and keeping sensitive analogue circuitry away from potential digital and RF noise sources.
+## Functional PCB Partitioning
 
-A 3D representation of the resulting board is shown at the top of this README.
+The board is arranged around three distinct functional regions:
 
-A more detailed schematic and PCB overview is available in the project documentation.
+**RF → Digital → ADC Boundary → Analogue**
 
----
+![STM32WL Functional PCB Partitioning](Images/STM32WL_Partitioning.jpg)
+
+### Analogue and Digital Separation
+
+I concentrated the **analogue front end in the lower section of the PCB**, while the MCU and digital circuitry are located in the upper section.
+
+The two areas also use different power approaches:
+
+- **Digital section — SMPS**
+- **Analogue section — dedicated LDO**
+
+I used the LDO for the analogue section to provide a cleaner supply for the sensor signal-conditioning and ADC circuitry, while the more efficient switch-mode supply powers the digital section.
+
+### ADC Placement
+
+I deliberately positioned the ADC at the boundary between the analogue and digital sections.
+
+The **analogue-facing pins are oriented towards the analogue signal chain**, while the **digital interface faces the MCU and digital circuitry**.
+
+This keeps the analogue connections short and avoids unnecessarily routing digital signals through the sensitive analogue section.
+
+### RF Separation
+
+The RF circuitry is physically separated at the top of the PCB around the antenna interface.
+
+This gives the RF section its own clearly defined area and keeps it away from the analogue signal-conditioning circuitry at the opposite end of the board.
+
+### Layout Intent
+
+The partitioning was a deliberate part of the PCB architecture rather than something that emerged during routing.
+
+My aim was to:
+
+- keep sensitive analogue circuitry away from digital switching activity;
+- provide appropriate power regulation for the analogue and digital domains;
+- minimise unnecessary analogue/digital signal crossover;
+- place the ADC at the natural interface between the two domains; and
+- keep the RF circuitry physically distinct from the rest of the design.
+
+The result is a PCB where the **system architecture is reflected directly in the physical layout**.
 
 ## Schematic
 
@@ -239,6 +272,7 @@ This distinction is intentional: the repository documents the engineering work I
 ## Repository Structure
 
 ```text
+
 STM32WL-LoRa-Sensor-Board-Portfolio
 │
 ├── Hardware
@@ -250,19 +284,25 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 │   └── STM32WL_PCB_Layout.jpg
 │
 ├── Project_Management
-│   └── STM32WL_Project_Plan.pdf
+│   ├── STM32WL_Project_Plan.pdf
+│   └── STM32WL_Project_Plan.xlsx
 │
 ├── Report
 │   └── STM32WL_Design_Report.pdf
 │
 ├── Simulation
 │   ├── LTspice
+│   │
 │   └── Python_Analysis
+│       ├── results images
 │       ├── Python_FFT.ipynb
 │       ├── Python_SNR.ipynb
 │       ├── SallenKey_Analysis.ipynb
-│       └── Results
+│       ├── README.md
+│       └── README_FilterSim.md
 │
+├── .gitattributes
+├── LICENSE
 └── README.md
 ```
 
@@ -274,6 +314,7 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 
 * Altium Designer
 * LTspice
+* STM32CubeIDE
 
 **Embedded / RF**
 
