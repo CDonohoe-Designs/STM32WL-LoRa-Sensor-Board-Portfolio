@@ -6,13 +6,9 @@
 
 ## Project Overview
 
-I designed this STM32WL-based wireless sensor board as a mixed-signal and RF hardware development project combining analogue signal acquisition, embedded processing and long-range sub-GHz wireless communication.
+I designed this STM32WL-based wireless sensor board as a mixed-signal hardware project combining analogue signal acquisition, embedded processing and sub-GHz LoRa communications. The design includes the analogue front end, ADC filtering, power architecture, RF interface and 4-layer PCB layout.
 
-The design is centred on the **STM32WL**, which combines an STM32 microcontroller with an integrated sub-GHz radio. I developed the surrounding analogue front end, filtering, power architecture, RF interface and PCB layout, with particular attention to keeping the analogue, digital and RF sections well controlled on the same board.
-
-I also used **LTspice and Python analysis** to investigate the analogue signal path and filter behaviour rather than relying solely on schematic calculations.
-
-The project was developed using a staged **EVT → DVT → PVT** development approach. The repository documents the completed design and analysis work and the planned route through fabrication, bring-up, validation and production.
+I used LTspice and Python/Jupyter analysis to investigate the analogue signal path and filter behaviour, and structured the development around an EVT → DVT → PVT approach.
 
 ---
 
@@ -37,13 +33,9 @@ The project was developed using a staged **EVT → DVT → PVT** development app
 
 ## System Architecture
 
-The board combines four main engineering areas:
+The board combines an analogue sensor front end, ADC acquisition, STM32WL processing and a sub-GHz RF interface.
 
 **Analogue Front End → STM32WL MCU/ADC → Digital Processing → Sub-GHz RF / LoRa**
-
-The analogue section conditions the external sensor signal before conversion by the MCU ADC. The STM32WL provides the embedded processing and integrated sub-GHz radio, while the RF section provides the external matching/filtering and antenna interface.
-
-The power architecture supports the mixed-signal nature of the design, with the PCB partitioned to reduce unwanted interaction between the analogue, digital and RF sections.
 
 ### Block Diagram
 
@@ -212,42 +204,7 @@ The report is intended to provide the engineering detail behind the shorter port
 
 ## Development Process
 
-I structured the project around the common:
-
-**EVT → DVT → PVT**
-
-development model.
-
-### EVT — Engineering Validation Test
-
-The EVT plan covered:
-
-* Research and simulation
-* Schematic development
-* PCB layout
-* Layout revision
-* Gerber release
-* Prototype fabrication and assembly
-* Initial power, MCU and analogue-front-end bring-up
-
-### DVT — Design Validation Test
-
-The planned DVT stage included:
-
-* Design refinement following EVT
-* Rev B design freeze
-* DVT build
-* EMC pre-scan
-* Test fixture development
-
-### PVT — Production Validation Test
-
-The planned PVT stage included:
-
-* Pilot build
-* Formal CE/FCC/ETSI compliance activity
-* Factory fixture validation
-* Production-release preparation
+I structured the project around an EVT → DVT → PVT development model. Completed work covered research, simulation, schematic development and PCB layout, while fabrication, bring-up, compliance and production validation were identified as subsequent stages.
 
 The project plan is available here:
 
