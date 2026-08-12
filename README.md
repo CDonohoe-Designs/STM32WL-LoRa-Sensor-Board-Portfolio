@@ -272,8 +272,11 @@ This distinction is intentional: the repository documents the engineering work I
 ## Repository Structure
 
 ```text
-
+```text
 STM32WL-LoRa-Sensor-Board-Portfolio
+│
+├── Design_Evidence
+│   └── STM32WL_Functional_Partitioning.png
 │
 ├── Hardware
 │   ├── STM32WL_BlockDiagram.pdf
@@ -281,7 +284,8 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 │
 ├── Images
 │   ├── STM32WL_PCB_3D.jpg
-│   └── STM32WL_PCB_Layout.jpg
+│   ├── STM32WL_PCB_Layout.jpg
+│   └── STM32WL_Partitioning.jpg
 │
 ├── Project_Management
 │   ├── STM32WL_Project_Plan.pdf
@@ -292,9 +296,13 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 │
 ├── Simulation
 │   ├── LTspice
+│   │   ├── README.md
+│   │   ├── MCP6001.lib
+│   │   └── simulation result images
 │   │
 │   └── Python_Analysis
-│       ├── results images
+│       ├── Results
+│       │   └── analysis result images
 │       ├── Python_FFT.ipynb
 │       ├── Python_SNR.ipynb
 │       ├── SallenKey_Analysis.ipynb
@@ -314,12 +322,13 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 
 * Altium Designer
 * LTspice
-* STM32CubeIDE
+
 
 **Embedded / RF**
 
 * STM32WL
 * Sub-GHz / LoRa architecture
+* STM32CubeIDE
 
 **Analysis**
 
