@@ -214,15 +214,7 @@ The project plan is available here:
 
 ## Project Status
 
-This repository is a **hardware design and engineering-analysis portfolio project**.
-
-The documented work covers the architecture, simulation, schematic development, PCB layout and supporting engineering analysis.
-
-The repository does **not** claim that the board has completed physical fabrication, hardware bring-up, DVT/PVT or formal regulatory certification.
-
-Those activities are shown in the project plan as subsequent development stages rather than completed validation.
-
-This distinction is intentional: the repository documents the engineering work I completed without presenting planned validation activity as completed product qualification.
+This repository documents the completed architecture, simulation, schematic and PCB-design work. Physical fabrication, hardware bring-up, DVT/PVT and formal regulatory compliance are not presented as completed activities.
 
 ---
 
