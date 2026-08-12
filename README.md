@@ -239,6 +239,7 @@ This distinction is intentional: the repository documents the engineering work I
 ## Repository Structure
 
 ```text
+
 STM32WL-LoRa-Sensor-Board-Portfolio
 │
 ├── Hardware
@@ -250,19 +251,25 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 │   └── STM32WL_PCB_Layout.jpg
 │
 ├── Project_Management
-│   └── STM32WL_Project_Plan.pdf
+│   ├── STM32WL_Project_Plan.pdf
+│   └── STM32WL_Project_Plan.xlsx
 │
 ├── Report
 │   └── STM32WL_Design_Report.pdf
 │
 ├── Simulation
 │   ├── LTspice
+│   │
 │   └── Python_Analysis
+│       ├── results images
 │       ├── Python_FFT.ipynb
 │       ├── Python_SNR.ipynb
 │       ├── SallenKey_Analysis.ipynb
-│       └── Results
+│       ├── README.md
+│       └── README_FilterSim.md
 │
+├── .gitattributes
+├── LICENSE
 └── README.md
 ```
 
