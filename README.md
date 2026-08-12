@@ -281,6 +281,7 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 
 * Altium Designer
 * LTspice
+* STM32CubeIDE
 
 **Embedded / RF**
 
