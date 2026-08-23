@@ -1,57 +1,44 @@
-# 🧪 Python Simulation: Sallen-Key Anti-Aliasing Filter Analysis
+# Python Simulation — Sallen-Key Anti-Aliasing Filter
 
-This simulation models a 3rd-order Butterworth Sallen-Key low-pass filter used as an anti-aliasing stage in the STM32WL analog front-end.
+I used this Python analysis to examine the 3rd-order Sallen-Key low-pass filter used in the analogue front end.
 
-## 📌 Objectives
+## Objectives
 
-- Simulate a noisy analog input and observe filtering.
-- Verify SNR improvement, plot step/sine responses and frequency response.
+- simulate a noisy analogue input;
+- examine the filter frequency response;
+- compare time-domain sine and pulse behaviour;
+- inspect FFT results; and
+- estimate the effect of filtering on the simulated signal-to-noise ratio.
 
-## 🛠 Tools Used
+## Tools
 
-- Python 3.x
-- Matplotlib (plotting), NumPy/SciPy (filter design, SNR)
-- Cutoff: ≈ 25 kHz | Q ≈ 1.23
+- Python 3
+- NumPy
+- SciPy
+- Matplotlib
 
-## 📈 Results Overview
+The analysis uses a cutoff frequency of approximately **25 kHz**.
 
-### ✅ Bode Response
-- Cutoff ≈ 25 kHz, roll-off ≈ 60 dB/dec.
-- Low phase distortion in passband.
+## Result plots
 
-![Bode Plot](PytonSallenKeyBode.JPG)
+### Bode response
 
-### ⏱ Time-Domain Response
+![Bode response](results%20images/Python_SallenKey_Bode.jpg)
 
-- **Sine Input**: Clean 10 kHz output
-- **Pulse Input**: Fast settling, low overshoot
+### Time-domain response
 
-![Time-Domain](pythonTimeDomain_Step&Sine.JPG)
+![Time-domain response](results%20images/Python_TimeDomain_Step_Sine.jpg)
 
-### 🔊 FFT Spectrum
+### FFT comparison
 
-- Good high-frequency noise suppression.
-- Cutoff behavior confirmed.
+![FFT comparison](results%20images/Pyton_FFT.jpg)
 
-![FFT Plot](Pyton_FFT.JPG)
+### SNR analysis
 
-### 🔍 SNR Analysis
+![SNR analysis](results%20images/Python_SNR.jpg)
 
-- Before Filtering: ~6 dB
-- After Filtering: ~–0.25 dB
-- Noise simulation artifact noted.
+The SNR notebook is a numerical experiment rather than a hardware measurement, so I treat its absolute values as simulation results rather than measured board performance.
 
-![SNR](Python_SNR.JPG)
+## Purpose
 
-## 📄 Summary
-
-This filter preserves bandwidth and minimizes distortion, suitable for ADC front-end. Confirms theory with practical results.
-
-## 🧠 Next Steps
-
-- Compare with LTspice version.
-- Validate component tolerances.
-- Integrate into STM32WL board.
-
----
-*Author: Caoilte Donohoe — Embedded & RF Systems Design*
+This work complements the LTspice analysis and gives me a second, scriptable way to examine the expected analogue-filter behaviour before physical hardware validation.
