@@ -1,15 +1,29 @@
-# LTspice Simulation Files
+# LTspice Simulation Evidence
 
-This folder includes all LTspice `.asc` and `.net` files used to simulate:
+I used LTspice to investigate the analogue front end before PCB implementation.
 
--  3rd-Order Sallen-Key Filter (Cutoff ~25 kHz)
--  Bias Generator using Op-Amp for VCOM (1.65 V)
-- Differential ADC signal drive using pseudo-differential structure
+The material in this folder documents simulation work covering:
 
-### Files
-- `LTspice_Sallen_key_MCP6001_filter.asc` – Cascaded RC + Sallen-Key stages
-- `LTspice_Sallen_Key_Diff_Output.asc` – ADC pseudo-differential output simulation
-- `LTspice_Sallen_Key_Diff_Output.net` – Netlist version
-- `Plots_Schematics/*.JPG` – Output waveforms and schematic captures
+- 3rd-order Sallen-Key low-pass filtering
+- bias / VCOM generation
+- pseudo-differential analogue behaviour
+- ADC input behaviour
+- transient and pulse response
 
-Useful for analyzing analog signal integrity before digitization.
+The public portfolio currently contains the simulation notes, the `MCP6001.lib` model and captured schematic / waveform images.
+
+It does **not** currently include a complete reproducible set of the original `.asc` and `.net` source files, so I present this folder as simulation evidence rather than as a complete LTspice project archive.
+
+## Included evidence
+
+- `LTSpice_BiasGen_ACAnalysis.JPG` — bias-generator AC analysis
+- `SalenKeyCct.JPG` — Sallen-Key circuit capture
+- `SalenKey_Bode.JPG` — filter frequency response
+- `TransAnalysis.JPG` — transient analysis
+- `TransAnalysis10kHz.JPG` — 10 kHz transient response
+- `PulseResponse.JPG` — pulse response
+- `psuedoDiff.JPG` — pseudo-differential simulation capture
+- `psuedoDiffVADC_Neg.JPG` — ADC-related pseudo-differential result
+- `MCP6001.lib` — op-amp model used during simulation
+
+This evidence complements the Python/Jupyter analysis in `Simulation/Python_Analysis/`.
