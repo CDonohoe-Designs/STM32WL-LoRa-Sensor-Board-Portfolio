@@ -28,8 +28,6 @@ I designed this project to bring the main electronics disciplines together on on
 - **[LTspice simulation evidence](Simulation/LTspice)**
 - **[Python/Jupyter analysis](Simulation/Python_Analysis)**
 
-> **Current status:** architecture, simulation, schematic and PCB design are complete. Physical fabrication, hardware bring-up, DVT/PVT and formal regulatory compliance are not presented as completed activities.
-
 ---
 
 ## Project Overview
