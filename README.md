@@ -4,6 +4,33 @@
 
 ![STM32WL LoRa Sensor Board 3D PCB](Images/STM32WL_PCB_3D.jpg)
 
+## 2-Minute Engineering Review
+
+I designed this project to bring the main electronics disciplines together on one board: **analogue signal conditioning, ADC acquisition, embedded processing, sub-GHz RF, power architecture and mixed-signal PCB layout**.
+
+### Engineering focus
+
+- **Mixed-signal acquisition** — external analogue sensor input, conditioning, anti-alias filtering and ADC interface
+- **Embedded + RF integration** — STM32WL MCU with integrated sub-GHz radio
+- **PCB architecture** — deliberate RF / digital / analogue partitioning on a 4-layer board
+- **Power integrity** — separate analogue and digital power approaches using an analogue LDO and digital SMPS
+- **Signal integrity** — short analogue paths, controlled functional boundaries and RF separation
+- **Engineering verification** — LTspice circuit analysis plus independent Python/Jupyter FFT, SNR and time-domain analysis
+- **Development planning** — architecture and design work structured around an EVT → DVT → PVT approach
+
+### Quick review
+
+- **[System block diagram](Hardware/STM32WL_BlockDiagram.pdf)**
+- **[Complete schematic](Hardware/STM32WL_Schematic.pdf)**
+- **[PCB functional partitioning](Images/STM32WL_Partitioning.jpg)**
+- **[Full design report](Report/STM32WL_Design_Report.pdf)**
+- **[LTspice simulation evidence](Simulation/LTspice)**
+- **[Python/Jupyter analysis](Simulation/Python_Analysis)**
+
+> **Current status:** architecture, simulation, schematic and PCB design are complete. Physical fabrication, hardware bring-up, DVT/PVT and formal regulatory compliance are not presented as completed activities.
+
+---
+
 ## Project Overview
 
 I designed this STM32WL-based wireless sensor board as a mixed-signal hardware project combining analogue signal acquisition, embedded processing and sub-GHz LoRa communications. The design includes the analogue front end, ADC signal path, power architecture, RF interface and 4-layer PCB layout.
