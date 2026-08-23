@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-I designed this STM32WL-based wireless sensor board as a mixed-signal hardware project combining analogue signal acquisition, embedded processing and sub-GHz LoRa communications. The design includes the analogue front end, ADC filtering, power architecture, RF interface and 4-layer PCB layout.
+I designed this STM32WL-based wireless sensor board as a mixed-signal hardware project combining analogue signal acquisition, embedded processing and sub-GHz LoRa communications. The design includes the analogue front end, ADC signal path, power architecture, RF interface and 4-layer PCB layout.
 
 I used LTspice and Python/Jupyter analysis to investigate the analogue signal path and filter behaviour, and structured the development around an EVT → DVT → PVT approach.
 
@@ -14,28 +14,28 @@ I used LTspice and Python/Jupyter analysis to investigate the analogue signal pa
 
 ## Design Highlights
 
-* STM32WL-based embedded and sub-GHz RF architecture
-* LoRa / sub-GHz wireless interface
-* Mixed-signal analogue and digital PCB design
-* External analogue sensor input
-* Analogue signal conditioning and anti-alias filtering
-* Sallen-Key filter analysis
-* Separate consideration of analogue, digital and RF power requirements
-* RF matching/filter network
-* 4-layer PCB layout
-* LTspice circuit simulation
-* Python/Jupyter signal analysis
-* FFT, SNR and time-domain analysis
-* Structured EVT / DVT / PVT development planning
-* Design documentation covering schematic, PCB and engineering decisions
+- STM32WL-based embedded and sub-GHz RF architecture
+- LoRa / sub-GHz wireless interface
+- Mixed-signal analogue and digital PCB design
+- External analogue sensor input
+- Analogue signal conditioning and anti-alias filtering
+- Sallen-Key filter analysis
+- Separate consideration of analogue, digital and RF power requirements
+- RF matching/filter network
+- 4-layer PCB layout
+- LTspice circuit-simulation evidence
+- Python/Jupyter signal analysis
+- FFT, SNR and time-domain analysis
+- Structured EVT / DVT / PVT development planning
+- Design documentation covering schematic, PCB and engineering decisions
 
 ---
 
 ## System Architecture
 
-The board combines an analogue sensor front end, ADC acquisition, STM32WL processing and a sub-GHz RF interface.
+The board combines an analogue sensor front end, ADC conversion, STM32WL processing and a sub-GHz RF interface.
 
-**Analogue Front End → STM32WL MCU/ADC → Digital Processing → Sub-GHz RF / LoRa**
+**Analogue Front End → ADC Stage → STM32WL MCU → Digital Processing → Sub-GHz RF / LoRa**
 
 ### Block Diagram
 
@@ -49,20 +49,20 @@ The complete system architecture is available here:
 
 A significant part of this project was the analogue acquisition path.
 
-I designed the signal-conditioning circuitry to accept an external sensor signal and prepare it for conversion by the STM32WL ADC.
+I designed the signal-conditioning circuitry to accept an external sensor signal and prepare it for ADC conversion.
 
-The analogue design includes filtering intended to limit unwanted high-frequency content before ADC conversion and to provide a controlled signal path into the MCU.
+The analogue design includes filtering intended to limit unwanted high-frequency content before conversion and to provide a controlled signal path into the digital section.
 
 Rather than treating the filter as an isolated schematic block, I analysed its behaviour using both circuit simulation and numerical analysis.
 
 This included:
 
-* Frequency-response analysis
-* Sallen-Key filter behaviour
-* Time-domain sine response
-* Pulse/step response
-* FFT analysis
-* Signal-to-noise analysis
+- Frequency-response analysis
+- Sallen-Key filter behaviour
+- Time-domain sine response
+- Pulse/step response
+- FFT analysis
+- Signal-to-noise analysis
 
 ---
 
@@ -70,19 +70,19 @@ This included:
 
 I used **LTspice** during development to investigate the analogue circuitry and verify expected behaviour before PCB implementation.
 
-The simulation work includes:
+The published LTspice material includes simulation evidence for:
 
-* Bias generation / AC analysis
-* Pseudo-differential analogue behaviour
-* ADC input behaviour
-* Sallen-Key frequency response
-* Transient analysis
-* Pulse response
-* Time-domain signal behaviour
+- Bias generation / AC analysis
+- Pseudo-differential analogue behaviour
+- ADC input behaviour
+- Sallen-Key frequency response
+- Transient analysis
+- Pulse response
+- Time-domain signal behaviour
 
-The LTspice material and associated results are available in:
+The repository currently publishes the simulation notes, model file and captured result images rather than presenting a complete reproducible LTspice source set.
 
-[LTspice simulation files and results](Simulation/LTspice)
+[View the LTspice simulation evidence](Simulation/LTspice)
 
 ---
 
@@ -92,11 +92,11 @@ I also used Python/Jupyter notebooks to provide an independent way of examining 
 
 The analysis includes:
 
-* FFT analysis
-* Signal-to-noise analysis
-* Sallen-Key filter analysis
-* Time-domain sine-wave analysis
-* Step and pulse response
+- FFT analysis
+- Signal-to-noise analysis
+- Sallen-Key filter analysis
+- Time-domain sine-wave analysis
+- Step and pulse response
 
 The notebooks are available here:
 
@@ -104,7 +104,7 @@ The notebooks are available here:
 
 The corresponding plots are available here:
 
-[Python analysis results](Simulation/Python_Analysis/Results)
+[Python analysis results](Simulation/Python_Analysis/results%20images)
 
 This gave me a useful way of comparing calculated, simulated and numerical behaviour during the design.
 
@@ -112,18 +112,18 @@ This gave me a useful way of comparing calculated, simulated and numerical behav
 
 ## STM32WL and RF
 
-The STM32WL was selected because it combines the MCU and sub-GHz radio functionality in a single device, making it well suited to a compact wireless sensor architecture.
+I selected the STM32WL because it combines the MCU and sub-GHz radio functionality in a single device, making it well suited to a compact wireless sensor architecture.
 
 The RF section includes the external components required between the STM32WL RF interface and antenna connection.
 
 During the PCB design I treated the RF section as a distinct functional area and considered:
 
-* RF component placement
-* Short RF signal paths
-* Grounding
-* Matching/filter components
-* Separation from noisy digital circuitry
-* Interaction between RF, analogue and power sections
+- RF component placement
+- Short RF signal paths
+- Grounding
+- Matching/filter components
+- Separation from noisy digital circuitry
+- Interaction between RF, analogue and power sections
 
 The objective was to integrate the RF section into the mixed-signal PCB without compromising the analogue acquisition path.
 
@@ -158,11 +158,9 @@ I used the LDO for the analogue section to provide a cleaner supply for the sens
 
 ### ADC Placement
 
-I deliberately positioned the ADC at the boundary between the analogue and digital sections.
+I deliberately positioned the ADC stage at the boundary between the analogue and digital sections.
 
-The **analogue-facing pins are oriented towards the analogue signal chain**, while the **digital interface faces the MCU and digital circuitry**.
-
-This keeps the analogue connections short and avoids unnecessarily routing digital signals through the sensitive analogue section.
+The analogue side faces the signal-conditioning chain, while the digital side faces the MCU and digital circuitry. This keeps sensitive analogue connections short and avoids unnecessarily routing digital signals through the analogue section.
 
 ### RF Separation
 
@@ -179,7 +177,7 @@ My aim was to:
 - keep sensitive analogue circuitry away from digital switching activity;
 - provide appropriate power regulation for the analogue and digital domains;
 - minimise unnecessary analogue/digital signal crossover;
-- place the ADC at the natural interface between the two domains; and
+- place the ADC stage at the natural interface between the two domains; and
 - keep the RF circuitry physically distinct from the rest of the design.
 
 The result is a PCB where the **system architecture is reflected directly in the physical layout**.
@@ -198,7 +196,7 @@ I produced a more detailed engineering report documenting the architecture, desi
 
 [View the full design report](Report/STM32WL_Design_Report.pdf)
 
-The report is intended to provide the engineering detail behind the shorter portfolio overview presented here.
+The report provides the engineering detail behind the shorter portfolio overview presented here.
 
 ---
 
@@ -221,43 +219,32 @@ This repository documents the completed architecture, simulation, schematic and 
 ## Repository Structure
 
 ```text
-```text
-STM32WL-LoRa-Sensor-Board-Portfolio
-│
-├── Design_Evidence
-│   └── STM32WL_Functional_Partitioning.png
-│
-├── Hardware
+STM32WL-LoRa-Sensor-Board-Portfolio/
+├── Hardware/
 │   ├── STM32WL_BlockDiagram.pdf
 │   └── STM32WL_Schematic.pdf
-│
-├── Images
+├── Images/
 │   ├── STM32WL_PCB_3D.jpg
 │   ├── STM32WL_PCB_Layout.jpg
 │   └── STM32WL_Partitioning.jpg
-│
-├── Project_Management
+├── Project_Management/
 │   ├── STM32WL_Project_Plan.pdf
 │   └── STM32WL_Project_Plan.xlsx
-│
-├── Report
+├── Report/
 │   └── STM32WL_Design_Report.pdf
-│
-├── Simulation
-│   ├── LTspice
+├── Simulation/
+│   ├── LTspice/
 │   │   ├── README.md
 │   │   ├── MCP6001.lib
 │   │   └── simulation result images
-│   │
-│   └── Python_Analysis
-│       ├── Results
-│       │   └── analysis result images
+│   └── Python_Analysis/
+│       ├── results images/
 │       ├── Python_FFT.ipynb
 │       ├── Python_SNR.ipynb
 │       ├── SallenKey_Analysis.ipynb
 │       ├── README.md
 │       └── README_FilterSim.md
-│
+├── .gitignore
 ├── .gitattributes
 ├── LICENSE
 └── README.md
@@ -269,28 +256,27 @@ STM32WL-LoRa-Sensor-Board-Portfolio
 
 **Hardware Design**
 
-* Altium Designer
-* LTspice
-
+- Altium Designer
+- LTspice
 
 **Embedded / RF**
 
-* STM32WL
-* Sub-GHz / LoRa architecture
-* STM32CubeIDE
+- STM32WL
+- Sub-GHz / LoRa architecture
+- STM32CubeIDE
 
 **Analysis**
 
-* Python
-* Jupyter Notebook
-* FFT analysis
-* SNR analysis
-* Time-domain analysis
+- Python
+- Jupyter Notebook
+- FFT analysis
+- SNR analysis
+- Time-domain analysis
 
 **Development**
 
-* Git / GitHub
-* EVT / DVT / PVT project planning
+- Git / GitHub
+- EVT / DVT / PVT project planning
 
 ---
 
