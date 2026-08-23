@@ -20,8 +20,9 @@ I designed this project to bring the main electronics disciplines together on on
 
 ### Quick review
 
+- **[Editable Altium project source](Hardware/Altium/STM32WL_Sens_ADC_Bat.PrjPcb)**
 - **[System block diagram](Hardware/STM32WL_BlockDiagram.pdf)**
-- **[Complete schematic](Hardware/STM32WL_Schematic.pdf)**
+- **[Complete schematic PDF](Hardware/STM32WL_Schematic.pdf)**
 - **[PCB functional partitioning](Images/STM32WL_Partitioning.jpg)**
 - **[Full design report](Report/STM32WL_Design_Report.pdf)**
 - **[LTspice simulation evidence](Simulation/LTspice)**
@@ -37,6 +38,8 @@ I designed this STM32WL-based wireless sensor board as a mixed-signal hardware p
 
 I used LTspice and Python/Jupyter analysis to investigate the analogue signal path and filter behaviour, and structured the development around an EVT → DVT → PVT approach.
 
+The repository now includes the **editable Altium project source** as well as curated PDF, image, simulation and analysis outputs. I have kept the public source package focused on the actual project design rather than publishing local Altium history, preview files, project logs, downloaded reference projects or third-party document archives.
+
 ---
 
 ## Design Highlights
@@ -50,6 +53,7 @@ I used LTspice and Python/Jupyter analysis to investigate the analogue signal pa
 - Separate consideration of analogue, digital and RF power requirements
 - RF matching/filter network
 - 4-layer PCB layout
+- Editable Altium schematic, PCB, project and output-job source
 - LTspice circuit-simulation evidence
 - Python/Jupyter signal analysis
 - FFT, SNR and time-domain analysis
@@ -209,6 +213,25 @@ My aim was to:
 
 The result is a PCB where the **system architecture is reflected directly in the physical layout**.
 
+---
+
+## Editable Altium Source
+
+I include a curated editable Altium source package so the design can be inspected beyond the exported PDFs and screenshots.
+
+**[Open the Altium project](Hardware/Altium/STM32WL_Sens_ADC_Bat.PrjPcb)**
+
+The source package contains:
+
+- the Altium PCB project file;
+- the final PCB document;
+- ADC, MCU I/O, power, RF and sensor schematic sheets; and
+- the project output-job file.
+
+I intentionally keep local history, previews, project logs, downloaded reference designs and unrelated working documents out of the public repository.
+
+---
+
 ## Schematic
 
 The complete schematic has been combined into a single PDF for quick review:
@@ -248,6 +271,15 @@ This repository documents the completed architecture, simulation, schematic and 
 ```text
 STM32WL-LoRa-Sensor-Board-Portfolio/
 ├── Hardware/
+│   ├── Altium/
+│   │   ├── STM32WL_Sens_ADC_Bat.PrjPcb
+│   │   ├── STM32WL_Sens_ADC_Bat.OutJob
+│   │   ├── STM32WL.PcbDoc
+│   │   ├── STM32WL_ADC.SchDoc
+│   │   ├── STM32WL_MCU_IOs.SchDoc
+│   │   ├── stm32wl_Power.SchDoc
+│   │   ├── STM32WL_RF.SchDoc
+│   │   └── STM32WL_Sensors.SchDoc
 │   ├── STM32WL_BlockDiagram.pdf
 │   └── STM32WL_Schematic.pdf
 ├── Images/
