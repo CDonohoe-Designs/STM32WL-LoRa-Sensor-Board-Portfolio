@@ -1,0 +1,32 @@
+# STM32WL-LoRa-Sensor-Board-Portfolio
+
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Altium / engineering-tool generated files
+**/History/
+**/__Previews/
+**/Project Outputs*/
+**/Project Logs*/
+*.PrjPcbStructure
+*.SchDocPreview
+*.PcbDocPreview
+*MessageListReport*
+
+# Temporary / backup files
+*.tmp
+*.bak
+*.orig
+*.rej
+*.~*
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
