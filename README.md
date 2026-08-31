@@ -4,6 +4,9 @@
 
 ![STM32WL LoRa Sensor Board 3D PCB](Images/STM32WL_PCB_3D.jpg)
 
+![STM32WL Sensor Board Rev A](docs/images/STM32WL_PCB.png)
+
+
 ## 2-Minute Engineering Review
 
 I designed this project to bring the main electronics disciplines together on one board: **analogue signal conditioning, ADC acquisition, embedded processing, sub-GHz RF, power architecture and mixed-signal PCB layout**.
