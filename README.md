@@ -6,6 +6,10 @@
 
 ![STM32WL LoRa Sensor Board 3D PCB](Images/STM32WL_PCB.png)
 
+<p align="center">
+  <img src="Images/STM32WL_PCB_3D.jpg" alt="STM32WL LoRa Sensor Board 3D PCB" width="50%">
+</p>
+
 
 ## 2-Minute Engineering Review
 
