@@ -3,7 +3,7 @@
 **Mixed-Signal | Sub-GHz RF / LoRa | Analogue Front End | STM32WL | Altium Designer | LTspice | Python**
 
 <p align="center">
-  <img src="Images/STM32WL_PCB.png" alt="STM32WL LoRa Sensor Board 3D PCB" width="40%">
+  <img src="Images/STM32WL_PCB.png" alt="STM32WL LoRa Sensor Board 3D PCB" width="30%">
 </p>
 
 
