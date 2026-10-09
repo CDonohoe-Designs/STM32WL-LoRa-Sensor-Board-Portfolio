@@ -1,351 +1,98 @@
 # STM32WL LoRa Sensor Board
 
-**Mixed-Signal | Sub-GHz RF / LoRa | Analogue Front End | STM32WL | Altium Designer | LTspice | Python**
+**Mixed-signal hardware design | STM32WLE5CC | Sub-GHz RF / LoRa | Analogue acquisition | Four-layer PCB | Altium Designer**
 
 <p align="center">
-  <img src="Images/STM32WL_PCB.png" alt="STM32WL LoRa Sensor Board 3D PCB" width="30%">
+  <img src="Images/STM32WL_PCB.png" alt="STM32WL Rev A PCB render" width="38%">
 </p>
 
+## Engineering overview
 
-## 2-Minute Engineering Review
+I developed this STM32WL sensor-board design to bring together analogue signal conditioning, precision ADC acquisition, onboard digital sensors, embedded processing, sub-GHz RF and mixed-signal PCB layout within one hardware platform. The project documents the design decisions and verification work behind the **Rev A four-layer PCB**, rather than presenting only a finished layout image.
 
-I designed this project to bring the main electronics disciplines together on one board: **analogue signal conditioning, ADC acquisition, embedded processing, sub-GHz RF, power architecture and mixed-signal PCB layout**.
+### Start here — engineering evidence
 
-### Engineering focus
+| Document | What it shows |
+| --- | --- |
+| **[7-page Hardware Design Summary](Report/STM32WLE5_Hardware_Design_Summary_Rev2.0.pdf)** | A visual overview of the architecture, circuit implementation, PCB partitioning and simulation evidence |
+| **[Complete Hardware Design Report — Rev 2.0](Report/STM32WLE5_Hardware_Design_Report_Rev2.0.pdf)** | Detailed treatment of the system, power, sensors, analogue acquisition, RF, layer stack, simulation, DRC and planned verification |
+| [Editable report master (Word)](Report/STM32WLE5_Hardware_Design_Report_Rev2.0.docx) | Source document for the full technical report |
+| **[Altium project](Hardware/Altium/STM32WL_Sens_ADC_Bat.PrjPcb)** | Editable five-sheet schematic project and Rev A PCB |
+| [Complete schematic PDF](Hardware/STM32WL_Schematic.pdf) | Read-only circuit review without Altium |
+| [System block diagram](Hardware/STM32WL_BlockDiagram.pdf) | Functional architecture and signal flow |
+| [EVT / DVT / PVT project plan](Project_Management/STM32WL_Project_Plan.pdf) | Development stages and planned validation |
 
-- **Mixed-signal acquisition** — external analogue sensor input, conditioning, anti-alias filtering and ADC interface
-- **Embedded + RF integration** — STM32WL MCU with integrated sub-GHz radio
-- **PCB architecture** — deliberate RF / digital / analogue partitioning on a 4-layer board
-- **Power integrity** — separate analogue and digital power approaches using an analogue LDO and digital SMPS
-- **Signal integrity** — short analogue paths, controlled functional boundaries and RF separation
-- **Engineering verification** — LTspice circuit analysis plus independent Python/Jupyter FFT, SNR and time-domain analysis
-- **Development planning** — architecture and design work structured around an EVT → DVT → PVT approach
+**Project status:** Architecture, schematic capture, PCB layout and simulation-based analysis are documented; the PCB has passed the configured Altium DRC with zero reported warnings and violations. **Fabrication, physical bring-up, RF measurements, DVT/PVT and regulatory compliance have not been presented as completed.** Simulation plots are not hardware measurements.
 
-### Quick review
+## Hardware architecture
 
-- **[Editable Altium project source](Hardware/Altium/STM32WL_Sens_ADC_Bat.PrjPcb)**
-- **[System block diagram](Hardware/STM32WL_BlockDiagram.pdf)**
-- **[Complete schematic PDF](Hardware/STM32WL_Schematic.pdf)**
-- **[PCB functional partitioning](Images/STM32WL_Partitioning.jpg)**
-- **[Full design report](Report/STM32WL_Design_Report.pdf)**
-- **[LTspice simulation evidence](Simulation/LTspice)**
-- **[Python/Jupyter analysis](Simulation/Python_Analysis)**
+The STM32WLE5CC integrates the MCU and sub-GHz radio. The board also includes a BME280 environmental sensor and MPU-6050 IMU on an I²C bus, plus an independent external analogue sensor input.
 
----
+The external acquisition chain is designed around:
 
-## Project Overview
+**SMA sensor input → ESD protection / input filtering → MCP6001 high-impedance buffering → first-order RC and active Sallen-Key low-pass stages → ADC141S626 14-bit ADC → STM32WLE5CC SPI interface**
 
-I designed this STM32WL-based wireless sensor board as a mixed-signal hardware project combining analogue signal acquisition, embedded processing and sub-GHz LoRa communications. The design includes the analogue front end, ADC signal path, power architecture, RF interface and 4-layer PCB layout.
+A REF3033 precision reference supports ADC conversion, while a buffered VCOM bias accommodates the single-supply analogue signal path. The anti-alias filter transition is around 25 kHz; LTspice and Python results are discussed in the full report.
 
-I used LTspice and Python/Jupyter analysis to investigate the analogue signal path and filter behaviour, and structured the development around an EVT → DVT → PVT approach.
+The power architecture separates an efficient **TLV62569 digital buck supply (+3V3)** from the **LD3985 analogue LDO (+3V3A)**. The RF signal chain includes matching and filtering, a BGS12SN6 RF switch and an external SMA antenna interface.
 
-The repository now includes the **editable Altium project source** as well as curated PDF, image, simulation and analysis outputs. I have kept the public source package focused on the actual project design rather than publishing local Altium history, preview files, project logs, downloaded reference projects or third-party document archives.
-
----
-
-## Design Highlights
-
-- STM32WL-based embedded and sub-GHz RF architecture
-- LoRa / sub-GHz wireless interface
-- Mixed-signal analogue and digital PCB design
-- External analogue sensor input
-- Analogue signal conditioning and anti-alias filtering
-- Sallen-Key filter analysis
-- Separate consideration of analogue, digital and RF power requirements
-- RF matching/filter network
-- 4-layer PCB layout
-- Editable Altium schematic, PCB, project and output-job source
-- LTspice circuit-simulation evidence
-- Python/Jupyter signal analysis
-- FFT, SNR and time-domain analysis
-- Structured EVT / DVT / PVT development planning
-- Design documentation covering schematic, PCB and engineering decisions
-
----
-
-## System Architecture
-
-The board combines an analogue sensor front end, ADC conversion, STM32WL processing and a sub-GHz RF interface.
-
-**Analogue Front End → ADC Stage → STM32WL MCU → Digital Processing → Sub-GHz RF / LoRa**
-
-### Block Diagram
-
-The complete system architecture is available here:
-
-[View the system block diagram](Hardware/STM32WL_BlockDiagram.pdf)
-
----
-
-## Analogue Front End
-
-A significant part of this project was the analogue acquisition path.
-
-I designed the signal-conditioning circuitry to accept an external sensor signal and prepare it for ADC conversion.
-
-The analogue design includes filtering intended to limit unwanted high-frequency content before conversion and to provide a controlled signal path into the digital section.
-
-Rather than treating the filter as an isolated schematic block, I analysed its behaviour using both circuit simulation and numerical analysis.
-
-This included:
-
-- Frequency-response analysis
-- Sallen-Key filter behaviour
-- Time-domain sine response
-- Pulse/step response
-- FFT analysis
-- Signal-to-noise analysis
-
----
-
-## LTspice Simulation
-
-I used **LTspice** during development to investigate the analogue circuitry and verify expected behaviour before PCB implementation.
-
-The published LTspice material includes simulation evidence for:
-
-- Bias generation / AC analysis
-- Pseudo-differential analogue behaviour
-- ADC input behaviour
-- Sallen-Key frequency response
-- Transient analysis
-- Pulse response
-- Time-domain signal behaviour
-
-The repository currently publishes the simulation notes, model file and captured result images rather than presenting a complete reproducible LTspice source set.
-
-[View the LTspice simulation evidence](Simulation/LTspice)
-
----
-
-## Python Signal Analysis
-
-I also used Python/Jupyter notebooks to provide an independent way of examining the analogue signal path and filter performance.
-
-The analysis includes:
-
-- FFT analysis
-- Signal-to-noise analysis
-- Sallen-Key filter analysis
-- Time-domain sine-wave analysis
-- Step and pulse response
-
-The notebooks are available here:
-
-[Python analysis](Simulation/Python_Analysis)
-
-The corresponding plots are available here:
-
-[Python analysis results](Simulation/Python_Analysis/results%20images)
-
-This gave me a useful way of comparing calculated, simulated and numerical behaviour during the design.
-
----
-
-## STM32WL and RF
-
-I selected the STM32WL because it combines the MCU and sub-GHz radio functionality in a single device, making it well suited to a compact wireless sensor architecture.
-
-The RF section includes the external components required between the STM32WL RF interface and antenna connection.
-
-During the PCB design I treated the RF section as a distinct functional area and considered:
-
-- RF component placement
-- Short RF signal paths
-- Grounding
-- Matching/filter components
-- Separation from noisy digital circuitry
-- Interaction between RF, analogue and power sections
-
-The objective was to integrate the RF section into the mixed-signal PCB without compromising the analogue acquisition path.
-
----
-
-## PCB Design
-
-I developed the PCB as a **4-layer mixed-signal design** in Altium Designer.
-
-A key part of the layout strategy was the deliberate physical separation of the **RF, digital and analogue sections**, rather than allowing the different functional blocks to become intermixed across the PCB.
+## Four-layer PCB implementation
 
 ![STM32WL PCB Layout](Images/STM32WL_PCB_Layout.jpg)
 
-## Functional PCB Partitioning
-
-The board is arranged around three distinct functional regions:
-
-**RF → Digital → ADC Boundary → Analogue**
-
 ![STM32WL Functional PCB Partitioning](Images/STM32WL_Partitioning.jpg)
 
-### Analogue and Digital Separation
+The PCB layout follows the functional architecture:
 
-I concentrated the **analogue front end in the lower section of the PCB**, while the MCU and digital circuitry are located in the upper section.
+- **RF region:** At the antenna end, with short signal paths, local grounding and RF-specific routing rules.
+- **Digital region:** STM32WL, onboard sensors and MCU interfaces.
+- **ADC boundary:** Acquisition stage positioned between the analogue circuitry and MCU interface.
+- **Analogue region:** Sensor input, conditioning, ADC and dedicated analogue power regulation.
 
-The two areas also use different power approaches:
+Layer 2 provides the primary continuous ground reference, while Layer 3 supports power distribution. The RF path was designed using a 50 Ω controlled-impedance routing profile. The [complete report](Report/STM32WLE5_Hardware_Design_Report_Rev2.0.pdf) includes the layer-stack rationale, implemented rules and DRC evidence.
 
-- **Digital section — SMPS**
-- **Analogue section — dedicated LDO**
+## Verification and analysis evidence
 
-I used the LDO for the analogue section to provide a cleaner supply for the sensor signal-conditioning and ADC circuitry, while the more efficient switch-mode supply powers the digital section.
+**[LTspice analogue simulation evidence](Simulation/LTspice)** covers bias generation, the anti-alias filter's frequency and transient behaviour, and associated captured results. This folder contains supporting notes and result images, **not a complete reproducible source set** for every original simulation.
 
-### ADC Placement
+**[LTspice RF simulation material](Simulation/LTSpice_RF_Ouput_Analysis)** documents RF matching and filtering analysis, including an available LTspice circuit file.
 
-I deliberately positioned the ADC stage at the boundary between the analogue and digital sections.
+**[Python / Jupyter analysis](Simulation/Python_Analysis)** includes FFT, SNR, Sallen-Key and time-domain studies, with [corresponding result plots](Simulation/Python_Analysis/results%20images). These are numerical/simulation investigations rather than measured performance of assembled hardware.
 
-The analogue side faces the signal-conditioning chain, while the digital side faces the MCU and digital circuitry. This keeps sensitive analogue connections short and avoids unnecessarily routing digital signals through the analogue section.
+The [Altium DRC evidence](Design_Evidence/STM32WL_DRC_Report.jpg) provides a PCB rule-check checkpoint. A clean DRC establishes compliance with the configured checks; it does not substitute for electrical or RF validation.
 
-### RF Separation
+## Editable Altium source
 
-The RF circuitry is physically separated at the top of the PCB around the antenna interface.
+The authoritative design is **[STM32WL_RevA.PcbDoc](Hardware/Altium/STM32WL_RevA.PcbDoc)** within the [Altium project](Hardware/Altium/STM32WL_Sens_ADC_Bat.PrjPcb). The project includes five functional schematic sheets, the Rev A PCB, supporting schematic and PCB libraries and the [production output job](Hardware/Altium/STM32WL_Production_RevA.OutJob).
 
-This gives the RF section its own clearly defined area and keeps it away from the analogue signal-conditioning circuitry at the opposite end of the board.
+Library sources are supplied under [Hardware/Altium/Libraries](Hardware/Altium/Libraries), alongside the project PCB library. The production output job is configured for the Rev A board; some manually managed output paths refer to the original Windows development directory and may require adjustment when used on another machine.
 
-### Layout Intent
+A remaining L10 footprint-model identity difference was observed during schematic/PCB synchronisation; the physical PCB footprint was retained. This is recorded as a source-library portability consideration, not a claimed hardware validation result.
 
-The partitioning was a deliberate part of the PCB architecture rather than something that emerged during routing.
-
-My aim was to:
-
-- keep sensitive analogue circuitry away from digital switching activity;
-- provide appropriate power regulation for the analogue and digital domains;
-- minimise unnecessary analogue/digital signal crossover;
-- place the ADC stage at the natural interface between the two domains; and
-- keep the RF circuitry physically distinct from the rest of the design.
-
-The result is a PCB where the **system architecture is reflected directly in the physical layout**.
-
----
-
-## Editable Altium Source
-
-I include a curated editable Altium source package so the design can be inspected beyond the exported PDFs and screenshots.
-
-**[Open the Altium project](Hardware/Altium/STM32WL_Sens_ADC_Bat.PrjPcb)**
-
-The source package contains:
-
-- the Altium PCB project file;
-- the final PCB document;
-- ADC, MCU I/O, power, RF and sensor schematic sheets; and
-- the project output-job file.
-
-I intentionally keep local history, previews, project logs, downloaded reference designs and unrelated working documents out of the public repository.
-
----
-
-## Schematic
-
-The complete schematic has been combined into a single PDF for quick review:
-
-[View the complete schematic](Hardware/STM32WL_Schematic.pdf)
-
----
-
-## Design Report
-
-I produced a more detailed engineering report documenting the architecture, design decisions and analysis behind the project.
-
-[View the full design report](Report/STM32WL_Design_Report.pdf)
-
-The report provides the engineering detail behind the shorter portfolio overview presented here.
-
----
-
-## Development Process
-
-I structured the project around an EVT → DVT → PVT development model. Completed work covered research, simulation, schematic development and PCB layout, while fabrication, bring-up, compliance and production validation were identified as subsequent stages.
-
-The project plan is available here:
-
-[View the EVT / DVT / PVT project plan](Project_Management/STM32WL_Project_Plan.pdf)
-
----
-
-## Project Status
-
-This repository documents the completed architecture, simulation, schematic and PCB-design work. Physical fabrication, hardware bring-up, DVT/PVT and formal regulatory compliance are not presented as completed activities.
-
----
-
-## Repository Structure
+## Repository guide
 
 ```text
 STM32WL-LoRa-Sensor-Board-Portfolio/
 ├── Hardware/
-│   ├── Altium/
-│   │   ├── STM32WL_Sens_ADC_Bat.PrjPcb
-│   │   ├── STM32WL_Sens_ADC_Bat.OutJob
-│   │   ├── STM32WL.PcbDoc
-│   │   ├── STM32WL_ADC.SchDoc
-│   │   ├── STM32WL_MCU_IOs.SchDoc
-│   │   ├── stm32wl_Power.SchDoc
-│   │   ├── STM32WL_RF.SchDoc
-│   │   └── STM32WL_Sensors.SchDoc
+│   ├── Altium/              # PrjPcb, five SchDoc sheets, Rev A PcbDoc,
+│   │                        # supporting libraries and production OutJob
 │   ├── STM32WL_BlockDiagram.pdf
 │   └── STM32WL_Schematic.pdf
-├── Images/
-│   ├── STM32WL_PCB_3D.jpg
-│   ├── STM32WL_PCB_Layout.jpg
-│   └── STM32WL_Partitioning.jpg
-├── Project_Management/
-│   ├── STM32WL_Project_Plan.pdf
-│   └── STM32WL_Project_Plan.xlsx
 ├── Report/
-│   └── STM32WL_Design_Report.pdf
+│   ├── STM32WLE5_Hardware_Design_Summary_Rev2.0.pdf
+│   ├── STM32WLE5_Hardware_Design_Report_Rev2.0.pdf
+│   └── STM32WLE5_Hardware_Design_Report_Rev2.0.docx
+├── Design_Evidence/         # Partitioning and DRC evidence
+├── Images/                  # PCB views and copper-layer illustrations
 ├── Simulation/
 │   ├── LTspice/
-│   │   ├── README.md
-│   │   ├── MCP6001.lib
-│   │   └── simulation result images
+│   ├── LTSpice_RF_Ouput_Analysis/
 │   └── Python_Analysis/
-│       ├── results images/
-│       ├── Python_FFT.ipynb
-│       ├── Python_SNR.ipynb
-│       ├── SallenKey_Analysis.ipynb
-│       ├── README.md
-│       └── README_FilterSim.md
-├── .gitignore
-├── .gitattributes
-├── LICENSE
-└── README.md
+└── Project_Management/      # EVT / DVT / PVT plan
 ```
 
----
+## What this project demonstrates
 
-## Tools Used
+This repository provides evidence of my approach to hardware development: translating a system concept into partitioned schematics and PCB layout, selecting and integrating RF/analogue/digital components, developing targeted simulation and numerical analysis, applying design rules and recording the verification steps still required before hardware release.
 
-**Hardware Design**
-
-- Altium Designer
-- LTspice
-
-**Embedded / RF**
-
-- STM32WL
-- Sub-GHz / LoRa architecture
-- STM32CubeIDE
-
-**Analysis**
-
-- Python
-- Jupyter Notebook
-- FFT analysis
-- SNR analysis
-- Time-domain analysis
-
-**Development**
-
-- Git / GitHub
-- EVT / DVT / PVT project planning
-
----
-
-## What This Project Demonstrates
-
-For me, this project brings together several areas of electronics design that are often treated separately:
-
-**analogue electronics + embedded hardware + RF + PCB design + simulation + engineering verification**
-
-It demonstrates how I approach a mixed-signal design from system architecture through schematic and PCB implementation, while using simulation and numerical analysis to support the design decisions.
-
-The emphasis is not just on producing a schematic or PCB, but on understanding how the analogue, digital, RF and power sections interact as a complete electronic system.
+**Tools:** Altium Designer, LTspice, Python, Jupyter and Git/GitHub.
