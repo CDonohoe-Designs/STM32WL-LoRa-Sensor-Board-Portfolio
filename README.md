@@ -93,6 +93,5 @@ STM32WL-LoRa-Sensor-Board-Portfolio/
 
 ## What this project demonstrates
 
-This repository provides evidence of my approach to hardware development: translating a system concept into partitioned schematics and PCB layout, selecting and integrating RF/analogue/digital components, developing targeted simulation and numerical analysis, applying design rules and recording the verification steps still required before hardware release.
-
+This repository provides evidence of my approach to hardware development: translating a system concept into partitioned schematics and PCB layout, selecting and integrating RF/analogue/digital components, developing targeted simulation and numerical analysis.
 **Tools:** Altium Designer, LTspice, Python, Jupyter and Git/GitHub.
